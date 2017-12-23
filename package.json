@@ -1,0 +1,23 @@
+{
+  "name": "api.surf.repair",
+  "version": "1.0.0",
+  "description": "Surf Repair API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aliustaoglu/api.surf.repair.git"
+  },
+  "keywords": [
+    "surf"
+  ],
+  "author": "Cuneyt Aliustaoglu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aliustaoglu/api.surf.repair/issues"
+  },
+  "homepage": "https://github.com/aliustaoglu/api.surf.repair#readme",
+  "devDependencies": {}
+}
