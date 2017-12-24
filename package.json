@@ -19,5 +19,8 @@
     "url": "https://github.com/aliustaoglu/api.surf.repair/issues"
   },
   "homepage": "https://github.com/aliustaoglu/api.surf.repair#readme",
-  "devDependencies": {}
+  "devDependencies": {
+    "aws-sdk": "^2.175.0",
+    "jszip": "^3.1.5"
+  }
 }
