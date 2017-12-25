@@ -1,23 +1,24 @@
-const AWS = require('aws-sdk');
-const JSZip = require('jszip');
 const fs = require('fs');
 const path = require('path');
+const deployer = require('./deployer');
 
-const zip = new JSZip();
+const apiName = process.argv.slice(2)[0];
 
-const walkSync = function(dir, filelist) {
-  var fs = fs || require('fs'),
-    files = fs.readdirSync(dir);
-  filelist = filelist || [];
-  files.forEach(function(file) {
-    if (fs.statSync(dir + '/' + file).isDirectory()) {
-      filelist = walkSync(dir + '/' + file, filelist);
-    } else {
-      filelist.push(path.join(dir, file).replace(__dirname, ''));
-    }
-  });
-  return filelist;
-};
+if (!apiName) {
+  console.error('No API name found. Please provide an API name');
+  return 0;
+}
 
-const fileList = walkSync(__dirname + '/api');
-console.log(fileList);
+// Deploy all the APIs in the apis folder
+if (apiName == ':ALL') {
+  const dirs = fs.readdirSync(path.join(__dirname, 'apis'));
+  for(let i = 0; i<dirs.length; i++){
+    const funcName = dirs[i];
+    console.log(`Deploying ${i+1} of ${dirs.length} : ${funcName}`)
+    deployer(funcName);
+  }
+  return 0;
+}
+
+// single API deploy
+deployer(apiName);

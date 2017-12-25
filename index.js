@@ -1,53 +1,41 @@
-let lambdaResponse;
-const context = {
-  succeed: (response) => {
-    lambdaResponse = response;
-  }
-};
-
-const dp = require('./deploy');
-
-const mapData = require('./api/mapData');
 const AWS = require('aws-sdk');
-var JSZip = require("jszip");
-var zip = new JSZip();
-var fs = require('fs');
+const config = require('./config');
+AWS.config.update({ region: config.lambdaConfigs.Region });
+const credentials = new AWS.SharedIniFileCredentials({ profile: config.profile });
+AWS.config.credentials = credentials;
+// ### DON'T UPDATE ABOVE
+// =============================================================
 
-var contents = fs.readFileSync(__dirname + '/api/mapData.js', 'utf8');
+// AWS Lambda mocks (update when you need to change params)
+//--------------------------------------------------------------
+const context = {
+  succeed: response => {
+    console.log('context.succeed: ' + response);
+  },
+  done: response => {
+    console.log('context.done: ' + response);
+  },
+  fail: error => {
+    console.log('context.fail: ' + error);
+  },
 
-
-AWS.config.update({region: 'us-east-1'});
-
-const m = mapData.handler(null, context, null);
-
-const s3 = new AWS.S3({apiVersion: '2006-03-01'});
-const ddb = new AWS.DynamoDB({apiVersion: '2012-10-08'});
-const ld = new AWS.Lambda();
-
-zip.file("index.js", contents);
-var promise = zip.generateAsync({type : "uint8array"});
-promise.then(
-  (buff)=> {
-    ld.updateFunctionCode(
-      {
-        FunctionName: 'arn:aws:lambda:us-east-1:504786997684:function:hellomyapi',
-        ZipFile: buff
-      }, (err, data) => {
-        console.log(err);
-      }
-    );
-  }
-);
-
-
-
-
-
-
-/*ddb.listTables({Limit: 10}, function(err, data) {
-  if (err) {
-    console.log("Error", err.code);
+};
+const event = {
+  key3: 'value3',
+  key2: 'value2',
+  key1: 'value1'
+};
+const callback = (error, result) => {
+  if (error) {
+    console.log('Callback error: ' + error);
   } else {
-    console.log("Table names are ", data.TableNames[0]);
+    console.log('Callback result: ' + result);
   }
-});*/
+}
+//--------------------------------------------------------------
+
+// Update below as your needs for debugging
+// The function you like to debug etc
+const helloApi = require('./apis/helloApi/index');
+var fs = require('fs');
+const m = mapData.handler(event, context, callback);
