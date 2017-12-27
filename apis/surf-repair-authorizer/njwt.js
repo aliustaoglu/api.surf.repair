@@ -1,3 +1,6 @@
+// This is cloned from njwt as it's not a part of AWS Lambda and this project does not use Auth0
+// So we need to add this library to our JWT processing functions
+
 'use strict';
 
 var util = require('util');

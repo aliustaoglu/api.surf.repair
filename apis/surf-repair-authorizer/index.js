@@ -8,7 +8,7 @@ exports.handler = function(event, context, callback) {
     if (err) {
       callback('Unauthorized');
     } else {
-      console.log(verifiedJwt);
+      //console.log(verifiedJwt);
       callback(null, generatePolicy('user', 'Allow', event.methodArn, verifiedJwt.body));
     }
   });
